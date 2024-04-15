@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  app-database:
+    image: mysql:8.0.30-debian
+    container_name: email-marketing-database
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=email-marketing
+      - TZ=America/Sao_Paulo
+      - MYSQL_INITDB_SKIP_TZINFO=true
+    networks:
+      - email-marketing-network
+
+networks:
+  email-marketing-network:
+    driver: bridge

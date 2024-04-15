@@ -1,0 +1,30 @@
+./src
+├── app.controller.spec.ts
+├── app.controller.ts
+├── app.module.ts
+├── app.service.ts
+├── email-marketing
+│   ├── controller
+│   │   ├── email-marketing.controller.spec.ts
+│   │   └── email-marketing.controller.ts
+│   ├── dto
+│   │   └── send-email.dto.ts
+│   ├── email-marketing.module.ts
+│   ├── infrastructure
+│   ├── persistence
+│   │   └── entities
+│   │       └── email-marketing.entity.ts
+│   ├── progress
+│   │   ├── progress.gateway.spec.ts
+│   │   └── progress.gateway.ts
+│   ├── usecase
+│   │   ├── email-marketing.service.spec.ts
+│   │   ├── email-marketing.service.ts
+│   │   ├── model
+│   │   │   └── email-marketing.ts
+│   │   └── send-email.service.ts
+│   └── workers
+│       └── send-email.worker.ts
+└── main.ts
+
+11 directories, 17 files

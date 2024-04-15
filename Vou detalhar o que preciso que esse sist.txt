@@ -1,0 +1,53 @@
+Vou detalhar o que preciso que esse sistema faça:
+
+1 - o formato do body do POST que vou enviar é esse:
+
+POST http://localhost:3000/email
+
+{
+  "subject": "Assunto do Email",
+  "body": "texto ou html do email",
+  "contacts": [
+    {
+      "name": "Teste1",
+      "email":"teste1@teste"
+    },
+    {
+      "name": "Teste2",
+      "email":"teste2@teste"
+    },
+    {
+      "name": "Teste3",
+      "email":"teste3@teste"
+    }
+  ]
+}
+
+2 - Eu preciso que o serviço receba esse POST, processe os contacts, coloque esses contacts em uma fila de envio, processe e envie o subject e o body pra cada um dos contacts.
+
+3 - Eu quero que utilize o progress.gateway para retornar em tempo real o progresso dos envios do e-mail
+
+4 - Conforme envie cada e-mail, que salve os dados de acordo com o EmailMarketingEntity (name, email, subject, status, sendAt)
+
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class EmailMarketingEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  subject: string;
+
+  @Column()
+  status: string;
+
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP(0)' })
+  sendAt: Date;
+}
