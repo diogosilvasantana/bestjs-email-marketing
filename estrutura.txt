@@ -23,8 +23,10 @@
 │   │   ├── model
 │   │   │   └── email-marketing.ts
 │   │   └── send-email.service.ts
+│   ├── websocket
+│   │   └── progress.controller.ts
 │   └── workers
 │       └── send-email.worker.ts
 └── main.ts
 
-11 directories, 17 files
+12 directories, 18 files

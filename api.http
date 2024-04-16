@@ -12,10 +12,10 @@ content-type: application/json
     {
       "name": "Diogo",
       "email":"diogosilvaoficial@gmail.com"
-    },
-    {
-      "name": "Diogo",
-      "email":"diogosilvaoficial@gmail.com"
     }
   ]
 }
+
+###
+GET http://localhost:3000/email
+content-type: application/json

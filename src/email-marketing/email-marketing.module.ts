@@ -7,6 +7,8 @@ import { SendEmailService } from './usecase/send-email.service';
 import { SendEmailWorker } from './workers/send-email.worker';
 import { BullModule } from '@nestjs/bull';
 import { ProgressGateway } from './progress/progress.gateway';
+import { SaveEmailSendService } from './usecase/save-email-send.service';
+import { GmailServiceAdapter } from './adapters/service-connection/gmail-service.adapter';
 
 @Module({
   imports: [
@@ -23,8 +25,13 @@ import { ProgressGateway } from './progress/progress.gateway';
   providers: [
     EmailMarketingService,
     SendEmailService,
+    SaveEmailSendService,
     SendEmailWorker,
     ProgressGateway,
+    {
+      provide: 'ServiceConnectionAdapter',
+      useClass: GmailServiceAdapter,
+    },
   ],
 })
 export class EmailMarketingModule {}

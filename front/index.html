@@ -1,15 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebSocket Client</title>
+  <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
 </head>
 <body>
-  <h1>WebSocket Client</h1>
-  <!-- Aqui você pode adicionar elementos HTML para exibir mensagens recebidas, etc. -->
+  <progress id="progressBar" value="0" max="100"></progress>
+  <p id="progressText"></p>
+  <p id="progressMessage"></p> <!-- Novo elemento para exibir a mensagem -->
+  <script>
+    var socket = io('http://localhost:3000');
 
-  <!-- Inclua a referência para o arquivo JavaScript -->
-  <script src="websocket-client.js"></script>
+    socket.on('connect', function() {
+      console.log('Conectado ao servidor WebSocket');
+    });
+
+    socket.on('progress', function(data) {
+      console.log('Progresso recebido:', data);
+      if (data && typeof data.current === 'number' && typeof data.total === 'number') {
+        var progress = (data.current / data.total) * 100;
+        document.getElementById('progressBar').value = progress;
+        document.getElementById('progressText').innerText = `${data.current} de ${data.total} e-mails enviados.`;
+        document.getElementById('progressMessage').innerText = data.message; // Atualizar a mensagem de progresso
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,21 +1,15 @@
-const socket = new WebSocket('ws://localhost:3000'); // Endereço do servidor WebSocket
+import io from 'socket.io-client';
 
-// Evento chamado quando a conexão WebSocket é aberta
-socket.onopen = () => {
-  console.log('Conexão WebSocket estabelecida.');
-};
+const socket = io('http://localhost:3000'); // substitua por seu URL do servidor
 
-// Evento chamado quando uma mensagem é recebida do servidor WebSocket
-socket.onmessage = (event) => {
-  console.log('Mensagem recebida:', event.data);
-};
+socket.on('connect', () => {
+  console.log('Conectado ao servidor WebSocket');
+});
 
-// Evento chamado quando ocorre um erro na conexão WebSocket
-socket.onerror = (error) => {
-  console.error('Erro na conexão WebSocket:', error);
-};
+socket.on('progress', (data) => {
+  console.log('Progresso recebido:', data);
+});
 
-// Evento chamado quando a conexão WebSocket é fechada
-socket.onclose = () => {
-  console.log('Conexão WebSocket fechada.');
-};
+socket.on('disconnect', () => {
+  console.log('Desconectado do servidor WebSocket');
+});

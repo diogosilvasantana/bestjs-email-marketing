@@ -1,16 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
-import { WsAdapter } from '@nestjs/platform-ws'; // Importe o WsAdapter
+import { IoAdapter } from '@nestjs/platform-socket.io';
+
+class MySocketIoAdapter extends IoAdapter {
+  createIOServer(port: number, options?: any): any {
+    const server = super.createIOServer(port, options);
+    // Aqui você pode personalizar o servidor Socket.IO conforme necessário
+    return server;
+  }
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Adicione o adaptador WebSocket ao aplicativo
-  app.useWebSocketAdapter(new WsAdapter(app));
+  // Use o adaptador Socket.IO personalizado
+  app.useWebSocketAdapter(new MySocketIoAdapter(app));
 
-  // Adicione qualquer lógica de inicialização aqui
-  // Por exemplo, você pode começar a ouvir a fila aqui
+  app.enableCors();
+
   const logger = new Logger('Main');
   const port = 3000;
 

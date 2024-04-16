@@ -1,17 +1,15 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: { origin: '*' } })
 export class ProgressGateway {
   @WebSocketServer()
   server: Server;
 
-  sendProgressUpdate(progress: any): void {
+  sendProgressUpdate(current: number, total: number, message: string): void {
     try {
       if (this.server) {
-        console.log(progress);
-        console.log(this.server);
-        this.server.emit('progress', progress);
+        this.server.emit('progress', { current, total, message });
       } else {
         console.error('WebSocket server is not available.');
       }
