@@ -4,10 +4,16 @@
 ├── app.module.ts
 ├── app.service.ts
 ├── email-marketing
+│   ├── adapters
+│   │   └── service-connection
+│   │       ├── aws-service.adapter.ts
+│   │       ├── gmail-service.adapter.ts
+│   │       └── service-connection.adapter.ts
 │   ├── controller
 │   │   ├── email-marketing.controller.spec.ts
 │   │   └── email-marketing.controller.ts
 │   ├── dto
+│   │   ├── save-email.dto.ts
 │   │   └── send-email.dto.ts
 │   ├── email-marketing.module.ts
 │   ├── infrastructure
@@ -22,11 +28,10 @@
 │   │   ├── email-marketing.service.ts
 │   │   ├── model
 │   │   │   └── email-marketing.ts
+│   │   ├── save-email-send.service.ts
 │   │   └── send-email.service.ts
-│   ├── websocket
-│   │   └── progress.controller.ts
 │   └── workers
 │       └── send-email.worker.ts
 └── main.ts
 
-12 directories, 18 files
+13 directories, 22 files
