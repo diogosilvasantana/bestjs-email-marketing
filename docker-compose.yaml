@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   app-database:
     image: mysql:8.0.30-debian
@@ -12,6 +10,43 @@ services:
       - MYSQL_DATABASE=email-marketing
       - TZ=America/Sao_Paulo
       - MYSQL_INITDB_SKIP_TZINFO=true
+    networks:
+      - email-marketing-network
+
+  app-redis:
+    image: redis:latest
+    container_name: email-marketing-redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - email-marketing-network
+
+  app-nestjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: email-marketing-nestjs
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    depends_on:
+      - app-database
+      - app-redis
+    command: ["dockerize", "-wait", "tcp://app-database:3306", "-wait", "tcp://app-redis:6379", "-timeout", "20s", "--", "npm", "run", "start:prod"]
+    networks:
+      - email-marketing-network
+
+  app-front:
+    image: nginx:latest
+    container_name: email-marketing-front
+    restart: always
+    ports:
+      - 8090:80
+    volumes:
+      - ./front:/usr/share/nginx/html
     networks:
       - email-marketing-network
 

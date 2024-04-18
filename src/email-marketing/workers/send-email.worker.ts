@@ -3,6 +3,7 @@ import { Job } from 'bull';
 import { SendEmailService } from '../usecase/send-email.service';
 import { ProgressGateway } from '../progress/progress.gateway';
 import { SaveEmailSendService } from '../usecase/save-email-send.service';
+import { readFileSync } from 'fs';
 
 @Processor('emails')
 export class SendEmailWorker {
@@ -19,15 +20,27 @@ export class SendEmailWorker {
     job: Job<{
       subject: string;
       body: string;
+      htmlFilePath: string;
       contact: any;
       contactLength: number;
     }>,
   ): Promise<void> {
-    const { subject, body, contact, contactLength } = job.data;
+    const { subject, contact, contactLength, htmlFilePath } = job.data;
+    let { body } = job.data;
+
+    // Se htmlFilePath for fornecido, leia o arquivo HTML e use-o como o corpo do e-mail
+    if (htmlFilePath) {
+      body = readFileSync(htmlFilePath, 'utf-8');
+    }
 
     try {
       // Envie o e-mail
-      await this.sendEmailService.sendEmail(subject, body, contact.email);
+      await this.sendEmailService.sendEmail(
+        subject,
+        body,
+        htmlFilePath,
+        contact.email,
+      );
 
       // Incrementar o contador de e-mails
       SendEmailWorker.emailCount++;
@@ -65,9 +78,10 @@ export class SendEmailWorker {
       throw error;
     }
 
-    // Se todos os e-mails foram enviados, zerar o contador de e-mails
+    // Se todos os e-mails foram enviados, zerar o contador de e-mails e enviar mensagem de conclusão
     if (SendEmailWorker.emailCount === contactLength) {
       SendEmailWorker.emailCount = 0;
+      this.progressGateway.sendCompletionMessage(contactLength);
     }
 
     // Aguardar um intervalo de tempo antes de processar o próximo email

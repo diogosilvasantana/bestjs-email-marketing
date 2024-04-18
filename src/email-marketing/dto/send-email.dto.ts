@@ -1,4 +1,10 @@
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class ContactDto {
@@ -19,6 +25,10 @@ export class SendEmailDto {
   @IsString()
   @IsNotEmpty()
   body: string;
+
+  @IsString()
+  @IsOptional()
+  htmlFilePath?: string;
 
   @IsArray()
   @ValidateNested({ each: true })

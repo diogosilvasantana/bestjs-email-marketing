@@ -1,3 +1,8 @@
 export interface ServiceConnectionAdapter {
-  sendEmail(subject: string, body: string, contact: any): Promise<void>;
+  sendEmail(
+    subject: string,
+    bodyOrFilePath: string,
+    contact: any,
+  ): Promise<void>;
+  verifyConnection(): Promise<void>;
 }

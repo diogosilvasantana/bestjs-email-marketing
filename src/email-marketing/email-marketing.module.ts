@@ -9,28 +9,40 @@ import { BullModule } from '@nestjs/bull';
 import { ProgressGateway } from './progress/progress.gateway';
 import { SaveEmailSendService } from './usecase/save-email-send.service';
 import { GmailServiceAdapter } from './adapters/service-connection/gmail-service.adapter';
+import { AwsSesAdapter } from './adapters/service-connection/aws-service.adapter';
+import { EmailConnectConfigService } from './usecase/email-connect-config.service';
+import { EmailConnectConfigController } from './controller/email-connect-config.controller';
+import { EmailConnectConfigEntity } from './persistence/entities/email-connect-config.entity';
+import { EncryptPasswordUtils } from './utils/encrypt-password';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([EmailMarketingEntity]),
+    TypeOrmModule.forFeature([EmailMarketingEntity, EmailConnectConfigEntity]),
     BullModule.registerQueue({
       name: 'emails',
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
     }),
   ],
-  controllers: [EmailMarketingController],
+  controllers: [EmailMarketingController, EmailConnectConfigController],
   providers: [
     EmailMarketingService,
     SendEmailService,
     SaveEmailSendService,
     SendEmailWorker,
+    EmailConnectConfigService,
+    EncryptPasswordUtils,
     ProgressGateway,
     {
       provide: 'ServiceConnectionAdapter',
-      useClass: GmailServiceAdapter,
+      useFactory: () => {
+        switch (process.env.EMAIL_SERVICE) {
+          case 'GMAIL':
+            return new GmailServiceAdapter();
+          case 'AWS_SES':
+            return new AwsSesAdapter();
+          default:
+            throw new Error('Invalid email service provider');
+        }
+      },
     },
   ],
 })

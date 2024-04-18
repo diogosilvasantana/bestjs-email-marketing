@@ -17,4 +17,18 @@ export class ProgressGateway {
       console.error('Error sending progress:', error);
     }
   }
+
+  sendCompletionMessage(total: number): void {
+    try {
+      if (this.server) {
+        this.server.emit('completion', {
+          message: `${total} Emails enviados com sucesso`,
+        });
+      } else {
+        console.error('WebSocket server is not available.');
+      }
+    } catch (error) {
+      console.error('Error sending completion message:', error);
+    }
+  }
 }
