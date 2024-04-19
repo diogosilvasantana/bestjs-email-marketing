@@ -2,7 +2,11 @@ import { ServiceConnectionAdapter } from './service-connection.adapter';
 import { SES } from 'aws-sdk';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import * as dotenv from 'dotenv';
+import { Injectable } from '@nestjs/common';
 
+dotenv.config();
+@Injectable()
 export class AwsSesAdapter implements ServiceConnectionAdapter {
   private readonly ses;
 
@@ -19,7 +23,6 @@ export class AwsSesAdapter implements ServiceConnectionAdapter {
     bodyOrFilePath: string,
     contact: any,
   ): Promise<void> {
-    console.log('AWS SES Adapter');
     let body;
     if (existsSync(join(__dirname, bodyOrFilePath))) {
       body = readFileSync(join(__dirname, bodyOrFilePath), 'utf8');

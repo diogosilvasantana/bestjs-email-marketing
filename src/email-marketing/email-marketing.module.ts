@@ -14,6 +14,7 @@ import { EmailConnectConfigService } from './usecase/email-connect-config.servic
 import { EmailConnectConfigController } from './controller/email-connect-config.controller';
 import { EmailConnectConfigEntity } from './persistence/entities/email-connect-config.entity';
 import { EncryptPasswordUtils } from './utils/encrypt-password';
+import { ServiceConnectionAdapterService } from './usecase/service-connection-adapter.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { EncryptPasswordUtils } from './utils/encrypt-password';
     SaveEmailSendService,
     SendEmailWorker,
     EmailConnectConfigService,
+    ServiceConnectionAdapterService,
     EncryptPasswordUtils,
     ProgressGateway,
     {
